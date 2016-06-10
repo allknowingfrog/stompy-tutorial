@@ -17,8 +17,6 @@ function init() {
 }
 
 function gameLoop() {
-    pos.x++;
-    pos.y++;
     ctx.fillStyle = 'white';
     ctx.fillRect(pos.x, pos.y, 50, 50);
 
@@ -26,5 +24,19 @@ function gameLoop() {
 }
 
 function keyDown(e) {
-    console.log(e.keyCode+' up');
+    e.preventDefault();
+    switch(e.keyCode) {
+        case 37:
+            pos.x--;
+            break;
+        case 38:
+            pos.y--;
+            break;
+        case 39:
+            pos.x++;
+            break;
+        case 40:
+            pos.y++;
+            break;
+    }
 }
