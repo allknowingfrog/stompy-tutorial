@@ -4,6 +4,12 @@ var pos = {
     x: 0,
     y: 0
 };
+var inputs = {
+    left: false,
+    up: false,
+    right: false,
+    down: false
+}
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -12,11 +18,24 @@ function init() {
     ctx = canvas.getContext('2d');
 
     document.addEventListener('keydown', keyDown, false);
+    document.addEventListener('keyup', keyUp, false);
 
     gameLoop();
 }
 
 function gameLoop() {
+    if(inputs.left) {
+        pos.x--;
+    } else if(inputs.right) {
+        pos.x++;
+    }
+
+    if(inputs.up) {
+        pos.y--;
+    } else if(inputs.down) {
+        pos.y++;
+    }
+
     ctx.fillStyle = 'white';
     ctx.fillRect(pos.x, pos.y, 50, 50);
 
@@ -27,16 +46,34 @@ function keyDown(e) {
     e.preventDefault();
     switch(e.keyCode) {
         case 37:
-            pos.x--;
+            inputs.left = true;
             break;
         case 38:
-            pos.y--;
+            inputs.up = true;
             break;
         case 39:
-            pos.x++;
+            inputs.right = true;
             break;
         case 40:
-            pos.y++;
+            inputs.down = true;
+            break;
+    }
+}
+
+function keyUp(e) {
+    e.preventDefault();
+    switch(e.keyCode) {
+        case 37:
+            inputs.left = false;
+            break;
+        case 38:
+            inputs.up = false;
+            break;
+        case 39:
+            inputs.right = false;
+            break;
+        case 40:
+            inputs.down = false;
             break;
     }
 }
