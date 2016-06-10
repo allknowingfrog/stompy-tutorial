@@ -9,7 +9,7 @@ var inputs = {
 }
 var timestamp = Date.now();
 
-var SPEED = 100;
+var ACCEL = 200;
 var MAX_DELTA = .03;
 
 function init() {
@@ -39,27 +39,34 @@ function updatePosition() {
     timestamp = now;
 
     if(inputs.left) {
-        player.x -= delta * SPEED;
+        player.vx -= delta * ACCEL;
     } else if(inputs.right) {
-        player.x += delta * SPEED;
+        player.vx += delta * ACCEL;
     }
 
     if(inputs.up) {
-        player.y -= delta * SPEED;
+        player.vy -= delta * ACCEL;
     } else if(inputs.down) {
-        player.y += delta * SPEED;
+        player.vy += delta * ACCEL;
     }
+
+    player.x += delta * player.vx;
+    player.y += delta * player.vy;
 
     if(player.getLeft() < 0) {
         player.setLeft(0);
+        player.vx = 0;
     } else if(player.getRight() > canvas.width) {
         player.setRight(canvas.width);
+        player.vx = 0;
     }
 
     if(player.getTop() < 0) {
         player.setTop(0);
+        player.vy = 0;
     } else if(player.getBottom() > canvas.height) {
         player.setBottom(canvas.height);
+        player.vy = 0;
     }
 }
 

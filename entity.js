@@ -5,6 +5,9 @@ function entity(x, y, w, h) {
     this.width = w;
     this.height = h;
 
+    this.vx = 0;
+    this.vy = 0;
+
     this.getLeft = function() {
         return this.x;
     };
