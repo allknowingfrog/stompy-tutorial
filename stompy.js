@@ -11,6 +11,8 @@ function init() {
     canvas.height = 600;
     ctx = canvas.getContext('2d');
 
+    document.addEventListener('keydown', keyDown, false);
+
     gameLoop();
 }
 
@@ -21,4 +23,8 @@ function gameLoop() {
     ctx.fillRect(pos.x, pos.y, 50, 50);
 
     window.requestAnimationFrame(gameLoop);
+}
+
+function keyDown(e) {
+    console.log(e.keyCode+' up');
 }
