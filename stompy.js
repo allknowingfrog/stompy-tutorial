@@ -7,6 +7,10 @@ var inputs = {
     right: false,
     down: false
 }
+var timestamp = Date.now();
+
+var SPEED = 100;
+var MAX_DELTA = .03;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -29,16 +33,21 @@ function gameLoop() {
 }
 
 function updatePosition() {
+    var now = Date.now();
+    var delta = (now - timestamp) / 1000;
+    if(delta > MAX_DELTA) delta = MAX_DELTA;
+    timestamp = now;
+
     if(inputs.left) {
-        player.x--;
+        player.x -= delta * SPEED;
     } else if(inputs.right) {
-        player.x++;
+        player.x += delta * SPEED;
     }
 
     if(inputs.up) {
-        player.y--;
+        player.y -= delta * SPEED;
     } else if(inputs.down) {
-        player.y++;
+        player.y += delta * SPEED;
     }
 
     if(player.getLeft() < 0) {
