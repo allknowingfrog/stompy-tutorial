@@ -10,6 +10,7 @@ var inputs = {
 var timestamp = Date.now();
 
 var ACCEL = 200;
+var MAX_VELOCITY = 100;
 var MAX_DELTA = .03;
 
 function init() {
@@ -48,6 +49,18 @@ function updatePosition() {
         player.vy -= delta * ACCEL;
     } else if(inputs.down) {
         player.vy += delta * ACCEL;
+    }
+
+    if(player.vx > MAX_VELOCITY) {
+        player.vx = MAX_VELOCITY;
+    } else if(player.vx < -MAX_VELOCITY) {
+        player.vx = -MAX_VELOCITY;
+    }
+
+    if(player.vy > MAX_VELOCITY) {
+        player.vy = MAX_VELOCITY;
+    } else if(player.vy < -MAX_VELOCITY) {
+        player.vy = -MAX_VELOCITY;
     }
 
     player.x += delta * player.vx;
