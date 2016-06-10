@@ -1,9 +1,6 @@
 var canvas;
 var ctx;
-var pos = {
-    x: 0,
-    y: 0
-};
+var player;
 var inputs = {
     left: false,
     up: false,
@@ -16,6 +13,8 @@ function init() {
     canvas.width = 600;
     canvas.height = 600;
     ctx = canvas.getContext('2d');
+
+    player = new entity(0, 0, 50, 50);
 
     document.addEventListener('keydown', keyDown, false);
     document.addEventListener('keyup', keyUp, false);
@@ -31,27 +30,27 @@ function gameLoop() {
 
 function updatePosition() {
     if(inputs.left) {
-        pos.x--;
+        player.x--;
     } else if(inputs.right) {
-        pos.x++;
+        player.x++;
     }
 
     if(inputs.up) {
-        pos.y--;
+        player.y--;
     } else if(inputs.down) {
-        pos.y++;
+        player.y++;
     }
 
-    if(pos.x < 0) {
-        pos.x = 0;
-    } else if(pos.x > canvas.width - 50) {
-        pos.x = canvas.width - 50;
+    if(player.getLeft() < 0) {
+        player.setLeft(0);
+    } else if(player.getRight() > canvas.width) {
+        player.setRight(canvas.width);
     }
 
-    if(pos.y < 0) {
-        pos.y = 0;
-    } else if(pos.y > canvas.height -50) {
-        pos.y = canvas.height - 50;
+    if(player.getTop() < 0) {
+        player.setTop(0);
+    } else if(player.getBottom() > canvas.height) {
+        player.setBottom(canvas.height);
     }
 }
 
@@ -59,7 +58,7 @@ function updateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = 'white';
-    ctx.fillRect(pos.x, pos.y, 50, 50);
+    ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
 function keyDown(e) {
