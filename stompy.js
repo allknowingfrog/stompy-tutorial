@@ -36,6 +36,8 @@ function gameLoop() {
         pos.y++;
     }
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.fillStyle = 'white';
     ctx.fillRect(pos.x, pos.y, 50, 50);
 
