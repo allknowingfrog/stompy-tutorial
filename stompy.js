@@ -24,6 +24,12 @@ function init() {
 }
 
 function gameLoop() {
+    updatePosition();
+    updateCanvas();
+    window.requestAnimationFrame(gameLoop);
+}
+
+function updatePosition() {
     if(inputs.left) {
         pos.x--;
     } else if(inputs.right) {
@@ -35,13 +41,13 @@ function gameLoop() {
     } else if(inputs.down) {
         pos.y++;
     }
+}
 
+function updateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = 'white';
     ctx.fillRect(pos.x, pos.y, 50, 50);
-
-    window.requestAnimationFrame(gameLoop);
 }
 
 function keyDown(e) {
