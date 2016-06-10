@@ -41,6 +41,18 @@ function updatePosition() {
     } else if(inputs.down) {
         pos.y++;
     }
+
+    if(pos.x < 0) {
+        pos.x = 0;
+    } else if(pos.x > canvas.width - 50) {
+        pos.x = canvas.width - 50;
+    }
+
+    if(pos.y < 0) {
+        pos.y = 0;
+    } else if(pos.y > canvas.height -50) {
+        pos.y = canvas.height - 50;
+    }
 }
 
 function updateCanvas() {
