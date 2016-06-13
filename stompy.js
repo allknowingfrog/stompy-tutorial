@@ -84,12 +84,33 @@ function updatePosition() {
 }
 
 function handleCollision() {
-    var platform;
+    var platform, dx, dy;
     for(var p=0; p<platforms.length; p++) {
         platform = platforms[p];
         if(collideRect(player, platform)) {
-            player.x = 0;
-            player.y = 0;
+            dx = (platform.getMidX() - player.getMidX()) / platform.width;
+            dy = (platform.getMidY() - player.getMidY()) / platform.height;
+
+            //horizontal
+            if(Math.abs(dx) > Math.abs(dy)) {
+                player.vx = 0;
+
+                if(dx < 0) {
+                    player.setLeft(platform.getRight());
+                } else {
+                    player.setRight(platform.getLeft());
+                }
+
+                //vertical
+            } else {
+                player.vy = 0;
+
+                if(dy < 0) {
+                    player.setTop(platform.getBottom());
+                } else {
+                    player.setBottom(platform.getTop());
+                }
+            }
         }
     }
 
