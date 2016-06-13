@@ -11,6 +11,8 @@ var timestamp = Date.now();
 
 var ACCEL = 200;
 var MAX_VELOCITY = 100;
+var MIN_VELOCITY = .5;
+var FRICTION_FACTOR = 3;
 var MAX_DELTA = .03;
 
 function init() {
@@ -43,24 +45,32 @@ function updatePosition() {
         player.vx -= delta * ACCEL;
     } else if(inputs.right) {
         player.vx += delta * ACCEL;
+    } else {
+        player.vx -= delta * player.vx * FRICTION_FACTOR;
     }
 
     if(inputs.up) {
         player.vy -= delta * ACCEL;
     } else if(inputs.down) {
         player.vy += delta * ACCEL;
+    } else {
+        player.vy -= delta * player.vy * FRICTION_FACTOR;
     }
 
     if(player.vx > MAX_VELOCITY) {
         player.vx = MAX_VELOCITY;
     } else if(player.vx < -MAX_VELOCITY) {
         player.vx = -MAX_VELOCITY;
+    } else if(Math.abs(player.vx) < MIN_VELOCITY) {
+        player.vx = 0;
     }
 
     if(player.vy > MAX_VELOCITY) {
         player.vy = MAX_VELOCITY;
     } else if(player.vy < -MAX_VELOCITY) {
         player.vy = -MAX_VELOCITY;
+    } else if(Math.abs(player.vy) < MIN_VELOCITY) {
+        player.vy = 0;
     }
 
     player.x += delta * player.vx;
