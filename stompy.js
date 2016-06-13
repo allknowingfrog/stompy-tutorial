@@ -7,6 +7,7 @@ var inputs = {
     right: false,
     down: false
 }
+var platforms = [];
 var timestamp = Date.now();
 
 var ACCEL = 200;
@@ -22,6 +23,10 @@ function init() {
     ctx = canvas.getContext('2d');
 
     player = new entity(0, 0, 50, 50);
+
+    platforms.push(new entity(100, 100, 50, 50));
+    platforms.push(new entity(200, 400, 50, 50));
+    platforms.push(new entity(400, 300, 50, 50));
 
     document.addEventListener('keydown', keyDown, false);
     document.addEventListener('keyup', keyUp, false);
@@ -98,6 +103,13 @@ function updateCanvas() {
 
     ctx.fillStyle = 'white';
     ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    ctx.fillStyle = 'red';
+    var platform;
+    for(var p=0; p<platforms.length; p++) {
+        platform = platforms[p];
+        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    }
 }
 
 function keyDown(e) {
