@@ -36,6 +36,7 @@ function init() {
 
 function gameLoop() {
     updatePosition();
+    handleCollision();
     updateCanvas();
     window.requestAnimationFrame(gameLoop);
 }
@@ -80,6 +81,17 @@ function updatePosition() {
 
     player.x += delta * player.vx;
     player.y += delta * player.vy;
+}
+
+function handleCollision() {
+    var platform;
+    for(var p=0; p<platforms.length; p++) {
+        platform = platforms[p];
+        if(collideRect(player, platform)) {
+            player.x = 0;
+            player.y = 0;
+        }
+    }
 
     if(player.getLeft() < 0) {
         player.setLeft(0);
@@ -146,4 +158,16 @@ function keyUp(e) {
             inputs.down = false;
             break;
     }
+}
+
+function collideRect(a, b) {
+    if(a.getLeft() >= b.getRight()) return false;
+
+    if(a.getTop() >= b.getBottom()) return false;
+
+    if(a.getRight() <= b.getLeft()) return false;
+
+    if(a.getBottom() <= b.getTop()) return false;
+
+    return true;
 }
