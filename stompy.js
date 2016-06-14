@@ -14,6 +14,7 @@ var ACCEL = 200;
 var MAX_VELOCITY = 100;
 var MIN_VELOCITY = .5;
 var FRICTION_FACTOR = 3;
+var GRAVITY = 500;
 var MAX_DELTA = .03;
 
 function init() {
@@ -57,10 +58,8 @@ function updatePosition() {
 
     if(inputs.up) {
         player.vy -= delta * ACCEL;
-    } else if(inputs.down) {
-        player.vy += delta * ACCEL;
     } else {
-        player.vy -= delta * player.vy * FRICTION_FACTOR;
+        player.vy += delta * GRAVITY;
     }
 
     if(player.vx > MAX_VELOCITY) {
