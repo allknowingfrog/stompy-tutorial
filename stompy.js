@@ -119,21 +119,21 @@ function handleCollision() {
 
             //horizontal
             if(Math.abs(dx) > Math.abs(dy)) {
-                player.vx = 0;
-
                 if(dx < 0) {
+                    if(player.vx < 0) player.vx = 0;
                     player.setLeft(platform.getRight());
                 } else {
+                    if(player.vx > 0) player.vx = 0;
                     player.setRight(platform.getLeft());
                 }
 
                 //vertical
             } else {
-                player.vy = 0;
-
                 if(dy < 0) {
+                    if(player.vy < 0) player.vy = 0;
                     player.setTop(platform.getBottom());
                 } else {
+                    if(player.vy > 0) player.vy = 0;
                     player.setBottom(platform.getTop());
                     airborn = false;
                 }
