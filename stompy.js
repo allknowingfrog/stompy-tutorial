@@ -29,6 +29,7 @@ var FRICTION_FACTOR = 3;
 var DROP_FACTOR = 3;
 var GRAVITY = 500;
 var MAX_DELTA = .03;
+var EDGE_CREEP = 7;
 
 function init() {
     spritesheet.src = 'hatguy.png';
@@ -135,6 +136,14 @@ function handleCollision() {
                 } else {
                     if(player.vy > 0) player.vy = 0;
                     player.setBottom(platform.getTop());
+                    if(Math.abs(player.vx) < EDGE_CREEP) {
+                        var x = player.getMidX();
+                        if(x < platform.getLeft() && !inputs.right) {
+                            player.vx = -EDGE_CREEP;
+                        } else if(x > platform.getRight() && !inputs.left) {
+                            player.vx = EDGE_CREEP;
+                        }
+                    }
                     airborn = false;
                 }
             }
