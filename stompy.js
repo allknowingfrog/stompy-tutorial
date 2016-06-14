@@ -9,6 +9,14 @@ var inputs = {
     right: false,
     down: false
 }
+var spritesheet = new Image();
+var sprites = {
+    left: new sprite(30, 38, 30, 38),
+    right: new sprite(0, 0, 30, 38),
+    rightJump: new sprite(30, 0, 30, 38),
+    leftJump: new sprite(0, 38, 30, 38)
+};
+var facingRight = true;
 var platforms = [];
 var timestamp = Date.now();
 
@@ -23,12 +31,14 @@ var GRAVITY = 500;
 var MAX_DELTA = .03;
 
 function init() {
+    spritesheet.src = 'hatguy.png';
+
     canvas = document.getElementById('canvas');
     canvas.width = 600;
     canvas.height = 600;
     ctx = canvas.getContext('2d');
 
-    player = new entity(0, 0, 50, 50);
+    player = new entity(0, 0, 30, 38);
 
     platforms.push(new entity(100, 550, 50, 50));
     platforms.push(new entity(200, 425, 50, 50));
@@ -152,8 +162,28 @@ function handleCollision() {
 function updateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = 'white';
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    if(player.vx > 0) {
+        facingRight = true;
+    } else if(player.vx < 0) {
+        facingRight = false;
+    }
+
+    var sprite;
+    if(airborn) {
+        if(facingRight) {
+            sprite = sprites.rightJump;
+        } else {
+            sprite = sprites.leftJump;
+        }
+    } else {
+        if(facingRight) {
+            sprite = sprites.right;
+        } else {
+            sprite = sprites.left;
+        }
+    }
+
+    ctx.drawImage(spritesheet, sprite.x, sprite.y, sprite.width, sprite.height, player.x, player.y, player.width, player.height);
 
     ctx.fillStyle = 'red';
     var platform;
