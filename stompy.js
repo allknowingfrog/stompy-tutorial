@@ -54,10 +54,16 @@ function updatePosition() {
     timestamp = now;
 
     if(inputs.left) {
+        if(!airborn && player.vx > 0) {
+            player.vx -= delta * player.vx * FRICTION_FACTOR;
+        }
         player.vx -= delta * ACCEL;
     } else if(inputs.right) {
+        if(!airborn && player.vx < 0) {
+            player.vx -= delta * player.vx * FRICTION_FACTOR;
+        }
         player.vx += delta * ACCEL;
-    } else {
+    } else if(!airborn) {
         player.vx -= delta * player.vx * FRICTION_FACTOR;
     }
 
