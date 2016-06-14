@@ -2,6 +2,7 @@ var canvas;
 var ctx;
 var player;
 var airborn;
+var jumpTimer = 0;
 var inputs = {
     left: false,
     up: false,
@@ -14,6 +15,8 @@ var timestamp = Date.now();
 var ACCEL = 200;
 var MAX_VELOCITY = 100;
 var MIN_VELOCITY = .5;
+var JUMP_VELOCITY = 300;
+var JUMP_TIME = .2;
 var FRICTION_FACTOR = 3;
 var GRAVITY = 500;
 var MAX_DELTA = .03;
@@ -26,9 +29,9 @@ function init() {
 
     player = new entity(0, 0, 50, 50);
 
-    platforms.push(new entity(100, 100, 50, 50));
-    platforms.push(new entity(200, 400, 50, 50));
-    platforms.push(new entity(400, 300, 50, 50));
+    platforms.push(new entity(100, 550, 50, 50));
+    platforms.push(new entity(200, 425, 50, 50));
+    platforms.push(new entity(400, 350, 50, 50));
 
     document.addEventListener('keydown', keyDown, false);
     document.addEventListener('keyup', keyUp, false);
@@ -58,8 +61,19 @@ function updatePosition() {
     }
 
     if(inputs.up) {
-        player.vy -= delta * ACCEL;
+        if(!airborn) {
+            jumpTimer = JUMP_TIME;
+            player.vy = -JUMP_VELOCITY;
+        }
+
+        if(jumpTimer > 0) {
+            jumpTimer -= delta;
+        } else {
+            player.vy += delta * GRAVITY;
+        }
+
     } else {
+        if(jumpTimer) jumpTimer = 0;
         player.vy += delta * GRAVITY;
     }
 
@@ -69,14 +83,6 @@ function updatePosition() {
         player.vx = -MAX_VELOCITY;
     } else if(Math.abs(player.vx) < MIN_VELOCITY) {
         player.vx = 0;
-    }
-
-    if(player.vy > MAX_VELOCITY) {
-        player.vy = MAX_VELOCITY;
-    } else if(player.vy < -MAX_VELOCITY) {
-        player.vy = -MAX_VELOCITY;
-    } else if(Math.abs(player.vy) < MIN_VELOCITY) {
-        player.vy = 0;
     }
 
     player.x += delta * player.vx;
