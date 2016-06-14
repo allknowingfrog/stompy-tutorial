@@ -18,6 +18,7 @@ var MIN_VELOCITY = .5;
 var JUMP_VELOCITY = 300;
 var JUMP_TIME = .2;
 var FRICTION_FACTOR = 3;
+var DROP_FACTOR = 3;
 var GRAVITY = 500;
 var MAX_DELTA = .03;
 
@@ -74,6 +75,7 @@ function updatePosition() {
 
     } else {
         if(jumpTimer) jumpTimer = 0;
+        if(player.vy < 0) player.vy -= delta * player.vy * DROP_FACTOR;
         player.vy += delta * GRAVITY;
     }
 
