@@ -1,6 +1,7 @@
 var canvas;
 var ctx;
 var player;
+var airborn;
 var inputs = {
     left: false,
     up: false,
@@ -83,6 +84,8 @@ function updatePosition() {
 }
 
 function handleCollision() {
+    airborn = true;
+
     var platform, dx, dy;
     for(var p=0; p<platforms.length; p++) {
         platform = platforms[p];
@@ -108,6 +111,7 @@ function handleCollision() {
                     player.setTop(platform.getBottom());
                 } else {
                     player.setBottom(platform.getTop());
+                    airborn = false;
                 }
             }
         }
@@ -127,6 +131,7 @@ function handleCollision() {
     } else if(player.getBottom() > canvas.height) {
         player.setBottom(canvas.height);
         player.vy = 0;
+        airborn = false;
     }
 }
 
@@ -181,13 +186,13 @@ function keyUp(e) {
 }
 
 function collideRect(a, b) {
-    if(a.getLeft() >= b.getRight()) return false;
+    if(a.getLeft() > b.getRight()) return false;
 
-    if(a.getTop() >= b.getBottom()) return false;
+    if(a.getTop() > b.getBottom()) return false;
 
-    if(a.getRight() <= b.getLeft()) return false;
+    if(a.getRight() < b.getLeft()) return false;
 
-    if(a.getBottom() <= b.getTop()) return false;
+    if(a.getBottom() < b.getTop()) return false;
 
     return true;
 }
