@@ -1,5 +1,7 @@
 var canvas;
 var ctx;
+var score;
+var highScore = 0;
 var player;
 var airborn;
 var jumpTimer = 0;
@@ -18,6 +20,7 @@ var sprites = {
 };
 var facingRight = true;
 var platforms = [];
+var target;
 var timestamp = Date.now();
 
 var ACCEL = 200;
@@ -40,12 +43,15 @@ function init() {
     canvas.height = 600;
     ctx = canvas.getContext('2d');
 
-    player = new entity(0, 0, 30, 38);
-    reset();
-
     platforms.push(new entity(100, 550, 50, 50));
     platforms.push(new entity(200, 425, 50, 50));
     platforms.push(new entity(400, 350, 50, 50));
+
+    target = new entity(0, 0, 10, 10);
+    moveTarget();
+
+    player = new entity(0, 0, 30, 38);
+    reset();
 
     document.addEventListener('keydown', keyDown, false);
     document.addEventListener('keyup', keyUp, false);
@@ -54,10 +60,23 @@ function init() {
 }
 
 function reset() {
+    score = 0;
     player.vx = 0;
     player.vy = 0;
     player.setLeft(0);
     player.setBottom(canvas.height);
+    moveTarget();
+}
+
+function moveTarget(hit) {
+    if(hit) {
+        score += 10;
+        if(score > highScore) highScore = score;
+    }
+
+    var platform = pick(platforms);
+    target.setMidX(platform.getMidX());
+    target.setMidY(platform.getTop() - platform.halfHeight);
 }
 
 function gameLoop() {
@@ -160,6 +179,8 @@ function handleCollision() {
         }
     }
 
+    if(collideRect(player, target)) moveTarget(true);
+
     if(player.getLeft() < 0) {
         player.setLeft(0);
         player.vx = 0;
@@ -181,6 +202,11 @@ function handleCollision() {
 
 function updateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = 'bold 18px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(highScore, 30, 40);
+    ctx.fillText(score, 30, 70);
 
     if(player.vx > 0) {
         facingRight = true;
@@ -211,6 +237,9 @@ function updateCanvas() {
         platform = platforms[p];
         ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
     }
+
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(target.x, target.y, target.width, target.height);
 }
 
 function keyDown(e) {
