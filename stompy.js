@@ -34,6 +34,7 @@ var GRAVITY = 500;
 var LETHAL_VELOCITY = 400;
 var MAX_DELTA = .03;
 var EDGE_CREEP = 7;
+var SCORE_SIZE = 8;
 
 function init() {
     spritesheet.src = 'hatguy.png';
@@ -70,7 +71,7 @@ function reset() {
 
 function moveTarget(hit) {
     if(hit) {
-        score += 10;
+        score += 5;
         if(score > highScore) highScore = score;
     }
 
@@ -205,8 +206,8 @@ function updateCanvas() {
 
     ctx.font = 'bold 18px Arial';
     ctx.fillStyle = 'white';
-    ctx.fillText(highScore, 30, 40);
-    ctx.fillText(score, 30, 70);
+    ctx.fillText(pad(highScore, SCORE_SIZE), 30, 40);
+    ctx.fillText(pad(score, SCORE_SIZE), 30, 70);
 
     if(player.vx > 0) {
         facingRight = true;
