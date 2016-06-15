@@ -28,6 +28,7 @@ var JUMP_TIME = .2;
 var FRICTION_FACTOR = 3;
 var DROP_FACTOR = 3;
 var GRAVITY = 500;
+var LETHAL_VELOCITY = 400;
 var MAX_DELTA = .03;
 var EDGE_CREEP = 7;
 
@@ -40,6 +41,7 @@ function init() {
     ctx = canvas.getContext('2d');
 
     player = new entity(0, 0, 30, 38);
+    reset();
 
     platforms.push(new entity(100, 550, 50, 50));
     platforms.push(new entity(200, 425, 50, 50));
@@ -49,6 +51,13 @@ function init() {
     document.addEventListener('keyup', keyUp, false);
 
     gameLoop();
+}
+
+function reset() {
+    player.vx = 0;
+    player.vy = 0;
+    player.setLeft(0);
+    player.setBottom(canvas.height);
 }
 
 function gameLoop() {
@@ -135,6 +144,7 @@ function handleCollision() {
                     player.setTop(platform.getBottom());
                 } else {
                     if(player.vy > 0) player.vy = 0;
+                    if(player.vy > LETHAL_VELOCITY) reset();
                     player.setBottom(platform.getTop());
                     if(Math.abs(player.vx) < EDGE_CREEP) {
                         var x = player.getMidX();
@@ -162,6 +172,7 @@ function handleCollision() {
         player.setTop(0);
         player.vy = 0;
     } else if(player.getBottom() > canvas.height) {
+        if(player.vy > LETHAL_VELOCITY) reset();
         player.setBottom(canvas.height);
         player.vy = 0;
         airborn = false;
