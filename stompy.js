@@ -19,6 +19,7 @@ var sprites = {
     leftJump: new sprite(0, 38, 30, 38)
 };
 var facingRight = true;
+var level;
 var platforms = [];
 var target;
 var timestamp = Date.now();
@@ -44,9 +45,8 @@ function init() {
     canvas.height = 600;
     ctx = canvas.getContext('2d');
 
-    platforms.push(new entity(100, 550, 50, 50));
-    platforms.push(new entity(200, 425, 50, 50));
-    platforms.push(new entity(400, 350, 50, 50));
+    level = new level();
+    loadLevel(level.next());
 
     target = new entity(0, 0, 10, 10);
     moveTarget();
@@ -69,10 +69,24 @@ function reset() {
     moveTarget();
 }
 
+function loadLevel(list) {
+    platforms = [];
+    var platform;
+    for(var p=0; p<list.length; p++) {
+        platform = list[p];
+        platforms.push(new entity(platform[0], platform[1], platform[2], platform[3]));
+    }
+}
+
 function moveTarget(hit) {
     if(hit) {
         score += 5;
         if(score > highScore) highScore = score;
+        if(score > 10) {
+            loadLevel(level.next());
+            highScore = 0;
+            reset();
+        }
     }
 
     var platform = pick(platforms);
